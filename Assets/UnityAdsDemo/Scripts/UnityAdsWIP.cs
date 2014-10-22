@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
-public class UnityAdsWTF : MonoBehaviour 
+public class UnityAdsWIP : MonoBehaviour 
 {
 	[Serializable]
 	public struct GameInfo

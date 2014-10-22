@@ -182,11 +182,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1436402505}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6adfe45421f848c7abaf10e60f0f15a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ac739100c87144848f3301231988f79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameId: 
-  testMode: 0
+  iOS:
+    gameID: 
+    testGameID: 
+  android:
+    gameID: 
+    testGameID: 
+  zoneID: 
+  disableTestMode: 0
+  showInfoLogs: 0
+  showDebugLogs: 0
+  showWarningLogs: 1
+  showErrorLogs: 1
 --- !u!4 &1436402507
 Transform:
   m_ObjectHideFlags: 0
