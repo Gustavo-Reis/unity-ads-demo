@@ -5,7 +5,7 @@ public class UnityAdsButton : MonoBehaviour
 {
 	public string zone = string.Empty;
 
-	void OnMouseUpAsButton ()
+	void OnMouseDown ()
 	{
 		UnityAdsDemoRobust.ShowAd(zone);
 	}

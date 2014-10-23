@@ -1,13 +1,13 @@
-using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine.Advertisements;
-using UnityEngine.Advertisements.Event;
-using UnityEngine.Advertisements.HTTPLayer;
-
 namespace UnityEngine.Advertisements {
+  using System;
+  using UnityEngine;
+  using System.Collections;
+  using System.Collections.Generic;
+  using System.IO;
+  using UnityEngine.Advertisements;
+  using UnityEngine.Advertisements.Event;
+  using UnityEngine.Advertisements.HTTPLayer;
+
   internal class PictureAdsFrameManager : MonoBehaviour {
   	Dictionary <ImageOrientation , Dictionary <ImageType, Texture2D > > textures;
     Dictionary <ImageOrientation , Dictionary <ImageType, Rect > > texturesRects;
@@ -155,7 +155,7 @@ namespace UnityEngine.Advertisements {
 					manager.pictureAdClicked();
           HTTPRequest request = new HTTPRequest("POST", _ad.clickActionUrl);
           request.addHeader("Content-Type", "application/json");
-          request.setPayload(DeviceInfo.getJson());
+          request.setPayload(DeviceInfo.adRequestJSONPayload(manager.network));
           request.execute((HTTPResponse response) => {
             if(response != null && response.data != null) {
               string jsonString = System.Text.Encoding.UTF8.GetString(response.data, 0, response.dataLength);

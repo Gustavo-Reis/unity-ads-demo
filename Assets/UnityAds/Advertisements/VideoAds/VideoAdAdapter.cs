@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-
 namespace UnityEngine.Advertisements {
-
+  using System;
+  using System.Collections.Generic;
   using ShowOptionsExtended = Optional.ShowOptionsExtended;
 
   internal class VideoAdAdapter : Adapter {
 
     private bool _isShowing = false;
-    private bool _campaignsAvailable = false;
     private static Dictionary<string, Dictionary<string, object>> _configurations = new Dictionary<string, Dictionary<string, object>>();
 
     public VideoAdAdapter(string adapterId) : base(adapterId) {}
@@ -19,7 +16,7 @@ namespace UnityEngine.Advertisements {
         
       triggerEvent(EventType.initStart, EventArgs.Empty);
         
-      UnityAds.SharedInstance.Init(Engine.Instance.AppId, Engine.Instance.testMode, (Advertisement.debugLevel & Advertisement.DebugLevel.DEBUG) != Advertisement.DebugLevel.NONE);
+      UnityAds.SharedInstance.Init(Engine.Instance.AppId, Engine.Instance.testMode);
 
       _configurations.Add(zoneId + adapterId, configuration);
     }
@@ -28,8 +25,12 @@ namespace UnityEngine.Advertisements {
     public override void StartPrecaching() {}
     public override void StopPrecaching() {}
     
-    public override bool isReady() {
-      return _campaignsAvailable;
+    public override bool isReady(string zoneId, string adapterId) {
+      Dictionary<string, object> configuration = _configurations[zoneId + adapterId];
+      if(configuration != null && configuration.ContainsKey("network")) {
+        return UnityAds.canShowAds((string)configuration["network"]);
+      }
+      return false;
     }
     
     public override void Show(string zoneId, string adapterId, ShowOptions options = null) {
@@ -65,7 +66,6 @@ namespace UnityEngine.Advertisements {
     
     private void UnityAdsCampaignsAvailable() {
       Utils.LogDebug("UNITY ADS: CAMPAIGNS READY!");
-      _campaignsAvailable = true;
       triggerEvent(EventType.initComplete, EventArgs.Empty);
       triggerEvent(EventType.adAvailable, EventArgs.Empty);
     }

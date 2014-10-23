@@ -1,8 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace UnityEngine.Advertisements {
+  using System;
+  using System.Collections;
+  using System.Collections.Generic;
 
   internal class Engine {
 
@@ -23,9 +22,10 @@ namespace UnityEngine.Advertisements {
 
     private bool _initialized = false;
 
+    // Engine is considered to be successfully initialized when we have successfully received configuration from server
     public bool isInitialized {
       get {
-        return _initialized;
+        return ConfigManager.Instance.isInitialized;
       }
     }
 
@@ -45,9 +45,8 @@ namespace UnityEngine.Advertisements {
         return;
       }
 
-      if(Application.internetReachability == NetworkReachability.NotReachable) {
-        return;
-      }
+      // Prevent double inits in all situations
+      _initialized = true;
 
       _testMode = testMode;
 
@@ -57,8 +56,6 @@ namespace UnityEngine.Advertisements {
       ConfigManager.Instance.RequestConfig();
     
       Event.EventManager.sendMediationInitEvent(appId);
-
-      _initialized = true;
     }
 
     public void Show(string zoneId, ShowOptions options) {

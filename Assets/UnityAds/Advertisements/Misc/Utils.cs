@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace UnityEngine.Advertisements {
-
+  using System;
+  using System.Collections;
+  using System.Collections.Generic;
   using DebugLevel = Advertisement.DebugLevel;
 
   internal static class Utils {

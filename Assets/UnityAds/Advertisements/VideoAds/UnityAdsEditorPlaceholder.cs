@@ -1,9 +1,9 @@
-using UnityEngine;
-using System.Collections;
-using System.IO;
-
 namespace UnityEngine.Advertisements
 {
+  using UnityEngine;
+  using System.Collections;
+  using System.IO;
+
 	internal class UnityAdsEditorPlaceholder : MonoBehaviour {
 		Texture2D placeHolderLandscape, placeHolderPortrait;
 		Texture2D blackTex = null;
