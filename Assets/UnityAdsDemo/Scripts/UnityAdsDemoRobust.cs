@@ -71,6 +71,7 @@ public class UnityAdsDemoRobust : MonoBehaviour
 			gameID = android.GetGameID();
 #endif
 
+			// Make sure a game ID is provided.
 			if (string.IsNullOrEmpty(gameID))
 			{
 				Debug.LogError("A valid game ID is required to initialize Unity Ads.");
@@ -85,10 +86,10 @@ public class UnityAdsDemoRobust : MonoBehaviour
 				Advertisement.debugLevel = Advertisement.DebugLevel.NONE;	
 
 				// Add additional debug levels if enabled in the inspector.
-				if (showInfoLogs) 	 Advertisement.debugLevel |= Advertisement.DebugLevel.INFO;
-				if (showDebugLogs) 	 Advertisement.debugLevel |= Advertisement.DebugLevel.DEBUG;
+				if (showInfoLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.INFO;
+				if (showDebugLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.DEBUG;
 				if (showWarningLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.WARNING;
-				if (showErrorLogs) 	 Advertisement.debugLevel |= Advertisement.DebugLevel.ERROR;
+				if (showErrorLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.ERROR;
 				
 				// Enable test mode by default when Development Build is set in Build Settings.
 				//  Disable it only when production mode testing is necessary. By checking to

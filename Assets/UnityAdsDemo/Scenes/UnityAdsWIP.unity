@@ -84,7 +84,7 @@ GameObject:
   - 4: {fileID: 492248772}
   - 114: {fileID: 492248771}
   m_Layer: 0
-  m_Name: UnityAdsWTF
+  m_Name: UnityAdsWIP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,10 +102,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iOS:
-    gameID: 18268
+    gameID: 
     testGameID: 
   android:
-    gameID: 18286
+    gameID: 
     testGameID: 
   zoneID: 
   disableTestMode: 0
