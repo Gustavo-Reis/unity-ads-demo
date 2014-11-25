@@ -542,7 +542,12 @@ MonoBehaviour:
     gameID: 18657
     testGameID: 18658
   zoneID: 
-  disableTestMode: 0
+  s2sRedeemEnabled: 1
+  s2sRedeemZone: rewardedVideoZone
+  s2sRedeemUserID: 
+  disableTestMode: 1
+  overridePause: 1
+  disablePause: 0
   showInfoLogs: 0
   showDebugLogs: 0
   showWarningLogs: 1

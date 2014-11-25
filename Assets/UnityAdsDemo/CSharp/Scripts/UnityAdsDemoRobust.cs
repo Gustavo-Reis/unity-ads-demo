@@ -1,4 +1,4 @@
-﻿// UnityAdsDemoRobust.cs - Written for Unity Ads Asset Store v1.0.2 (SDK 1.3.8)
+﻿// UnityAdsDemoRobust.cs - Written for Unity Ads Asset Store v1.0.3 (SDK 1.3.9)
 //  by Nikkolai Davenport <nikkolai@unity3d.com>
 //
 // This Unity Ads Demo script is a modified version of the example code provided within
@@ -28,6 +28,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.Advertisements.Optional;
 
 public class UnityAdsDemoRobust : MonoBehaviour 
 {
@@ -49,17 +50,31 @@ public class UnityAdsDemoRobust : MonoBehaviour
 	public GameInfo android;
 	public string zoneID;
 
+	// Use this to test Server-to-Server Redeem functionality. For more details, see:
+	//  http://unityads.unity3d.com/help/Documentation%20for%20Publishers/Server-to-server-Redeem-Callbacks
+	public bool s2sRedeemEnabled;
+	public string s2sRedeemZone = "rewardedVideoZone";
+	public string s2sRedeemUserID = string.Empty;
+
 	// Use this to show production ads in Development Builds.
 	public bool disableTestMode;
+
+	// HACK: Testing a possible fix for pause functionality.
+	public bool overridePause;
+	public bool disablePause;
 
 	// Use the following to show additional debug levels for the Unity Ads SDK.
 	public bool showInfoLogs;
 	public bool showDebugLogs;
 	public bool showWarningLogs = true;
 	public bool showErrorLogs = true;
+
+	public static UnityAdsDemoRobust Instance { get; private set; }
 	
 	void Awake() 
 	{
+		if (Instance == null) Instance = this;
+
 		// Check if the player is running on a supported platform: editor, iOS, Android.
 		if (Advertisement.isSupported) 
 		{
@@ -101,6 +116,12 @@ public class UnityAdsDemoRobust : MonoBehaviour
 				
 				// Only call Initialize once throughout your game.
 				Advertisement.Initialize(gameID,enableTestMode);
+
+				// Set the unique user ID for S2S callbacks.
+				if (string.IsNullOrEmpty(s2sRedeemUserID))
+				{
+					s2sRedeemUserID = SystemInfo.deviceUniqueIdentifier;
+				}
 			}
 		} 
 		else 
@@ -149,6 +170,23 @@ public class UnityAdsDemoRobust : MonoBehaviour
 			
 			// Re-enable the GUI for any additional UI elements.
 			GUI.enabled = true;
+
+			// Add an additional button if using S2S Redeem functionality.
+			if (s2sRedeemEnabled)
+			{
+				bool isRedeemZoneReady = Advertisement.isReady(s2sRedeemZone);
+
+				GUI.enabled = isRedeemZoneReady;
+				if (GUI.Button(new Rect(Screen.width-310, 10, 300, 50), isReady ? "Show Ad With S2S Redeem Callback" : "Waiting...")) 
+				{
+					Debug.Log(string.Format("Ad Placement zone with ID of {0} is {1}. This zone is using S2S Redeem Callback functionality.",
+					                        string.IsNullOrEmpty(s2sRedeemZone) ? "null" : s2sRedeemZone,
+					                        isRedeemZoneReady ? "ready" : "not ready"));
+
+					if (isRedeemZoneReady) DoShowAd_S2SRedeemVersion(s2sRedeemUserID,s2sRedeemZone);
+				}
+				GUI.enabled = true;
+			}
 		}
 		else
 		{
@@ -156,7 +194,7 @@ public class UnityAdsDemoRobust : MonoBehaviour
 		}
 	}
 
-	// Use this method to show an ad from an external class.
+	// Call this method from an external class to show an ad.
 	public static void ShowAd (string zone = null)
 	{
 		if (Advertisement.isInitialized)
@@ -166,7 +204,28 @@ public class UnityAdsDemoRobust : MonoBehaviour
 		}
 		else Debug.LogError("Failed to show advertisement. Unity Ads is not initialized.");
 	}
-	
+
+	// Call this method from an external classes to show a video ad using 
+	//  server-to-server callbacks to redeem rewards for completed video ads.
+	public static void ShowAdWithS2SRedeemCallback (string user, string zone = null)
+	{
+		if (Advertisement.isInitialized)
+		{
+			if (string.IsNullOrEmpty(user))
+			{
+				Debug.LogError("Failed to show advertisement. " +
+					"A valid unique ID is required to use S2S redeem callbacks.");
+			}
+			else
+			{
+				if (Advertisement.isReady(zone)) DoShowAd_S2SRedeemVersion(user,zone,!Instance.disablePause);
+				else Debug.LogWarning("Unable to show advertisement. Placement zone is not ready.");
+			}
+		}
+		else Debug.LogError("Failed to show advertisement. Unity Ads is not initialized.");
+	}
+
+	// Call this method from within this class to show an ad.
 	private static void DoShowAd (string zone = null, int version = 0)
 	{
 		// Functionality wise, the following two DoShowAd methods do exactly the same thing.
@@ -175,41 +234,66 @@ public class UnityAdsDemoRobust : MonoBehaviour
 		switch (version)
 		{
 		case 0:
-			DoShowAd_CondensedVersion(zone);
+			DoShowAd_CondensedVersion(zone,!Instance.disablePause);
 			break;
 		case 1:
-			DoShowAd_ExpandedVersion(zone);
+			DoShowAd_ExpandedVersion(zone,!Instance.disablePause);
 			break;
 		}
 	}
-	
+
+	// A way to call the Show() method within a single line of code.
 	private static void DoShowAd_CondensedVersion (string zone, bool pauseGameDuringAd = true)
 	{
 		Advertisement.Show(zone, new ShowOptions {
 			// With the pause option set to true, the timeScale and AudioListener 
 			//  volume for your game is set to 0 while the ad is shown.
-			pause = pauseGameDuringAd,
+			pause = Instance.overridePause?false:pauseGameDuringAd,
 			// The resultCallback is triggered when the ad is closed.
 			resultCallback = result => {
 				HandleShowResult(result);
 			}
 		});
 	}
-	
+
+	// A way to call the Show() method while setting parameters over multiple lines of code.
 	private static void DoShowAd_ExpandedVersion (string zone, bool pauseGameDuringAd = true)
 	{
 		ShowOptions options = new ShowOptions();
 		// With the pause option set to true, the timeScale and AudioListener 
 		//  volume for your game is set to 0 while the ad is shown.
-		options.pause = pauseGameDuringAd;
+		options.pause = Instance.overridePause?false:pauseGameDuringAd;
+		// The resultCallback is triggered when the ad is closed.
+		options.resultCallback = HandleShowResult;
+
+		Advertisement.Show(zone,options);
+
+	}
+
+	// A way to call the Show() method using server-to-server callbacks to redeem rewards.
+	//  Note: The server-to-server callback only occurs when testMode is false.
+	private static void DoShowAd_S2SRedeemVersion (string user, string zone, bool pauseGameDuringAd = true)
+	{
+		if (Instance.overridePause) PauseGame(pauseGameDuringAd);
+
+		ShowOptionsExtended options = new ShowOptionsExtended();
+		// The gamerSid is a unique identifier that you as the developer assign 
+		//  to each of your users. This can then be used as a form of validation 
+		//  for redeeming in-game rewards through Unity Ads.
+		options.gamerSid = user;
+		// With the pause option set to true, the timeScale and AudioListener 
+		//  volume for your game is set to 0 while the ad is shown.
+		options.pause = Instance.overridePause?false:pauseGameDuringAd;
 		// The resultCallback is triggered when the ad is closed.
 		options.resultCallback = HandleShowResult;
 		
 		Advertisement.Show(zone,options);
 	}
-	
+
 	private static void HandleShowResult (ShowResult result)
 	{
+		if (Instance.overridePause) PauseGame(false);
+
 		switch (result)
 		{
 		case ShowResult.Finished:
@@ -222,5 +306,11 @@ public class UnityAdsDemoRobust : MonoBehaviour
 			Debug.LogError("The ad failed to be shown.");
 			break;
 		}
+	}
+
+	private static void PauseGame (bool pause)
+	{
+		AudioListener.volume = pause?0f:1f;
+		Time.timeScale = pause?0f:1f;
 	}
 }
