@@ -53,7 +53,7 @@ public class UnityAdsHelper : MonoBehaviour
 	public bool showWarningLogs = true;
 	public bool showErrorLogs = true;
 
-	private static bool _isPaused;
+	private static bool _isPaused; // HACK: Workaround for pause/resume bug.
 
 	void Awake() 
 	{
