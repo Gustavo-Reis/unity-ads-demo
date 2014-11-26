@@ -131,7 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd0f624e00bf474a91e480da5565144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zone: rewardedVideoZone
+  zoneID: rewardedVideoZone
+  disablePause: 0
 --- !u!23 &532970703
 Renderer:
   m_ObjectHideFlags: 0
@@ -216,7 +217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd0f624e00bf474a91e480da5565144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zone: defaultVideoAndPictureZone
+  zoneID: defaultVideoAndPictureZone
+  disablePause: 0
 --- !u!23 &561689938
 Renderer:
   m_ObjectHideFlags: 0
@@ -517,8 +519,10 @@ GameObject:
   - 4: {fileID: 1436402507}
   - 114: {fileID: 1436402506}
   - 114: {fileID: 1436402508}
+  - 114: {fileID: 1436402510}
+  - 114: {fileID: 1436402509}
   m_Layer: 0
-  m_Name: UnityAdsDemo
+  m_Name: UnityAdsHelperExt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -532,22 +536,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1436402505}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ac739100c87144848f3301231988f79, type: 3}
+  m_Script: {fileID: 11500000, guid: ad159f0546c3742aaace1074a3a05064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   iOS:
-    gameID: 18659
-    testGameID: 18660
+    _gameID: 18659
+    _testGameID: 18660
   android:
-    gameID: 18657
-    testGameID: 18658
-  zoneID: 
-  s2sRedeemEnabled: 1
-  s2sRedeemZone: rewardedVideoZone
-  s2sRedeemUserID: 
-  disableTestMode: 1
-  overridePause: 1
-  disablePause: 0
+    _gameID: 18657
+    _testGameID: 18658
+  disableTestMode: 0
+  usePauseOverride: 0
   showInfoLogs: 0
   showDebugLogs: 0
   showWarningLogs: 1
@@ -572,11 +571,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 1436402505}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfc5622388006405d84d5040f31b6714, type: 3}
+  m_Script: {fileID: 11500000, guid: 123a2f2c7d74a4c099eec1d5c190ed7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showTimeScale: 1
-  showMouseStatus: 0
+  zoneID: 
+  disablePause: 0
+--- !u!114 &1436402509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1436402505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad12713aa311943a4a5aab89a4bb7862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  s2sRedeemZoneID: rewardedVideoZone
+  disablePause: 0
+--- !u!114 &1436402510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1436402505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09747a19b5c0e4d4c8d4a4fde8c68626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  s2sRedeemUserID: 
 --- !u!1 &1441189266
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,7 +728,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd0f624e00bf474a91e480da5565144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zone: pictureZone
+  zoneID: pictureZone
+  disablePause: 0
 --- !u!23 &1801481257
 Renderer:
   m_ObjectHideFlags: 0

@@ -21,18 +21,17 @@
 //  - Test mode can be disabled while Development Build is set
 //     by checking the option to disable it in the inspector.
 //
-// Hack Notes:
+// HACK Notes:
 //  - Enable usePauseOverride if your game fails to unpause 
 //     or gets stuck on a black screen after an ad is closed.
 
-using System;
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 using UnityEngine.Advertisements;
 
 public class UnityAdsHelper : MonoBehaviour 
 {
-	[Serializable]
+	[System.Serializable]
 	public struct GameInfo
 	{  
 		[SerializeField]
@@ -54,12 +53,10 @@ public class UnityAdsHelper : MonoBehaviour
 	public bool showWarningLogs = true;
 	public bool showErrorLogs = true;
 
-	public static UnityAdsHelper Instance;
-	
+	private static bool _isPaused;
+
 	void Awake() 
 	{
-		if (Instance == null) Instance = this;
-
 		string gameID = null;
 
 #if UNITY_IOS
@@ -94,22 +91,27 @@ public class UnityAdsHelper : MonoBehaviour
 		}
 	}
 
+	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
 	void OnApplicationPause (bool isPaused)
 	{
+		if (!usePauseOverride || isPaused == _isPaused) return;
+
 		if (isPaused) Debug.Log ("App was paused.");
 		else Debug.Log("App was resumed.");
 
-		// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
 		if (usePauseOverride) PauseOverride(isPaused);
 	}
 
 	public static bool isReady (string zone = null)
 	{
+		if (string.IsNullOrEmpty(zone)) zone = null;
 		return Advertisement.isReady(zone);
 	}
 
 	public static void ShowAd (string zone = null, bool pauseGameDuringAd = true)
 	{
+		if (string.IsNullOrEmpty(zone)) zone = null;
+
 		ShowOptions options = new ShowOptions();
 		options.pause = pauseGameDuringAd;
 		options.resultCallback = HandleShowResult;
@@ -117,7 +119,7 @@ public class UnityAdsHelper : MonoBehaviour
 		Advertisement.Show(zone,options);
 	}
 	
-	private static void HandleShowResult (ShowResult result)
+	public static void HandleShowResult (ShowResult result)
 	{
 		switch (result)
 		{
@@ -134,12 +136,14 @@ public class UnityAdsHelper : MonoBehaviour
 	}
 
 	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-	private static void PauseOverride (bool pause)
+	public static void PauseOverride (bool pause)
 	{
 		if (pause) Debug.Log("Pause game while ad is shown.");
 		else Debug.Log("Resume game after ad is closed.");
 		
 		AudioListener.volume = pause ? 0f : 1f;
 		Time.timeScale = pause ? 0f : 1f;
+
+		_isPaused = pause;
 	}
 }

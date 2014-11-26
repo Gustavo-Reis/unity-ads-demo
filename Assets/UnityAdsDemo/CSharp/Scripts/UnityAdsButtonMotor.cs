@@ -1,8 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.Advertisements;
+﻿// UnityAdsButtonMotor.cs - Written for Unity Ads Asset Store v1.0.4 (SDK 1.3.10)
+//  by Nikkolai Davenport <nikkolai@unity3d.com>
+//
+// A case specific behavior controller for the UnityAdsButton example.
+
+using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof(UnityAdsButton))]
+[RequireComponent(typeof(UnityAdsButton))]
 public class UnityAdsButtonMotor : MonoBehaviour 
 {
 	public float rotationSpeed = -5f;
@@ -16,17 +20,20 @@ public class UnityAdsButtonMotor : MonoBehaviour
 
 	void Start ()
 	{
+		_button = GetComponent<UnityAdsButton>();
+
 		_initialPos = transform.localPosition;
 		_disabledPos = new Vector3(_initialPos.x,_initialPos.y,disabledPosZ);
-		_button = gameObject.GetComponent<UnityAdsButton>();
 
 		transform.localPosition = _disabledPos;
 	}
 
 	void Update ()
 	{
-		if (Advertisement.isReady(_button.zone))
+		if (UnityAdsHelper.isReady(_button.zoneID))
 		{
+			collider.enabled = true;
+
 			Vector3 rotation = transform.localRotation.eulerAngles;
 			rotation += Vector3.up * rotationSpeed * Time.deltaTime;
 
@@ -35,6 +42,8 @@ public class UnityAdsButtonMotor : MonoBehaviour
 		}
 		else
 		{
+			collider.enabled = false;
+
 			transform.localPosition = MoveTowards(_disabledPos);
 		}
 	}
