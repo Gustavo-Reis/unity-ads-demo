@@ -99,13 +99,15 @@ function OnApplicationPause (isPaused : boolean) : void
 	if (usePauseOverride) PauseOverride(isPaused);
 }
 
-
+public static function isReady () : boolean { return isReady(null); }
 public static function isReady (zone : String) : boolean
 {
 	if (String.IsNullOrEmpty(zone)) zone = null;
 	return Advertisement.isReady(zone);
 }
 
+public static function ShowAd () : void { ShowAd(null,true); }
+public static function ShowAd (zone : String) : void { ShowAd(zone,true); }
 public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : void
 {
 	if (String.IsNullOrEmpty(zone)) zone = null;
