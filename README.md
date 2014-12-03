@@ -10,7 +10,12 @@ Download and import the latest version of [Unity Ads from the Asset Store](https
 ## Unity Ads Helper Script
 
 A quick drag-n-drop solution to integrating Unity Ads:
-* [Unity Ads Helper Script](https://gist.github.com/wcoastsands/9c1682579412efd49e32) 
+* UnityAdsHelper: Basic integration and helper methods.
+  * [C# Version](Assets/UnityAdsDemo/CSharp/Scripts/UnityAdsHelper.cs) 
+  * [JavaScript Version](Assets/UnityAdsDemo/JavaScript/Scripts/UnityAdsHelper.js)
+* UnityAdsHelperExt: Additional suppport for S2S Redeem Callbacks.
+  * [C# Version](Assets/UnityAdsDemo/CSharp/Scripts/UnityAdsHelperExt.cs) 
+  * [JavaScript Version](Assets/UnityAdsDemo/JavaScript/Scripts/UnityAdsHelperExt.js)
 
 ### How to Use It
 
@@ -31,7 +36,7 @@ These settings are automatically handled by the UnityAdsHelper script based on w
 
 Use this script to customize and create new ShowAd and HandleShowResult methods. Then simply call your custom ShowAd methods from any script in your project.
 
-If you want to keep statistics generated while testing separate from production stats, create a secondary game profile for each platform in the [Unity Ads Admin](http://unityads.unity3d.com/admin/). Then enter the new game IDs for these profiles into the Test Game ID fields for each platform in the inspector. Test profiles can also be useful if you have a development server for testing [S2S redeem callbacks](https://github.com/Applifier/unity-ads/wiki/Server-to-server-Redeem-Callbacks).
+If you want to keep statistics generated while testing separate from production stats, create a secondary game profile for each platform in the [Unity Ads Admin](http://unityads.unity3d.com/admin/). Then enter the new game IDs for these profiles into the Test Game ID fields for each platform in the inspector. Test profiles can also be useful if you have a development server for testing [S2S Redeem Callbacks](https://github.com/Applifier/unity-ads/wiki/Server-to-server-Redeem-Callbacks).
 
 ## Unity Ads Demo Scripts
 
