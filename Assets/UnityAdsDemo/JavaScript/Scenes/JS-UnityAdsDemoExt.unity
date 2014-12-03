@@ -117,6 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399fcccfaafed44878733162b89b38a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: -5
+  disabledPosZ: 10
+  tweenSpeed: 1
 --- !u!114 &532970702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd75c30bd98e42acb0a67dd592a0329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zoneID: 
+  disablePause: 0
 --- !u!23 &532970703
 Renderer:
   m_ObjectHideFlags: 0
@@ -198,6 +203,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399fcccfaafed44878733162b89b38a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: -5
+  disabledPosZ: 10
+  tweenSpeed: 1
 --- !u!114 &561689937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd75c30bd98e42acb0a67dd592a0329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zoneID: 
+  disablePause: 0
 --- !u!23 &561689938
 Renderer:
   m_ObjectHideFlags: 0
@@ -508,9 +518,11 @@ GameObject:
   m_Component:
   - 4: {fileID: 1436402507}
   - 114: {fileID: 1436402506}
+  - 114: {fileID: 1436402510}
   - 114: {fileID: 1436402508}
+  - 114: {fileID: 1436402509}
   m_Layer: 0
-  m_Name: UnityAdsHelper
+  m_Name: UnityAdsHelperExt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -534,6 +546,7 @@ MonoBehaviour:
     _gameID: 18657
     _testGameID: 18658
   disableTestMode: 0
+  usePauseOverride: 0
   showInfoLogs: 0
   showDebugLogs: 0
   showWarningLogs: 1
@@ -561,6 +574,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e97da6f4079944d985436d8ae232f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zoneID: 
+  disablePause: 0
+--- !u!114 &1436402509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1436402505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c50031d2be552424389d7e3afffdf76b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  s2sRedeemZoneID: rewardedVideoZone
+  disablePause: 0
+--- !u!114 &1436402510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1436402505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b617edd3aee04413896387ff3bd50d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  s2sRedeemUserID: 
 --- !u!1 &1441189266
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,6 +714,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399fcccfaafed44878733162b89b38a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: -5
+  disabledPosZ: 10
+  tweenSpeed: 1
 --- !u!114 &1801481256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -685,6 +728,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd75c30bd98e42acb0a67dd592a0329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zoneID: 
+  disablePause: 0
 --- !u!23 &1801481257
 Renderer:
   m_ObjectHideFlags: 0
