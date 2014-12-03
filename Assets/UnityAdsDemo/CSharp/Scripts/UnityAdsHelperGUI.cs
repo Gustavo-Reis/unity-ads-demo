@@ -7,7 +7,7 @@ using System.Collections;
 [RequireComponent(typeof(UnityAdsHelper))]
 public class UnityAdsHelperGUI : MonoBehaviour 
 {
-	public string zoneID;
+	public string zoneID = string.Empty;
 	public bool disablePause;
 
 	void OnGUI ()
