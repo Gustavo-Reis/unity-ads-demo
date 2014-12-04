@@ -18,12 +18,13 @@ public class UnityAdsHelperExt : MonoBehaviour
 
 	void Awake ()
 	{
+		if (string.IsNullOrEmpty(s2sRedeemUserID)) 
+			s2sRedeemUserID = SystemInfo.deviceUniqueIdentifier;
 		_sid = s2sRedeemUserID;
 	}
 
 	public static void ShowAd (string zone = null, bool pauseGameDuringAd = true)
 	{
-		if (string.IsNullOrEmpty(_sid)) _sid = SystemInfo.deviceUniqueIdentifier;
 		if (string.IsNullOrEmpty(zone)) zone = null;
 		
 		ShowOptionsExtended options = new ShowOptionsExtended();
