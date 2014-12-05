@@ -521,6 +521,7 @@ GameObject:
   - 114: {fileID: 1436402510}
   - 114: {fileID: 1436402508}
   - 114: {fileID: 1436402509}
+  - 114: {fileID: 1436402511}
   m_Layer: 0
   m_Name: UnityAdsHelperExt
   m_TagString: Untagged
@@ -546,7 +547,6 @@ MonoBehaviour:
     _gameID: 18657
     _testGameID: 18658
   disableTestMode: 0
-  usePauseOverride: 0
   showInfoLogs: 0
   showDebugLogs: 0
   showWarningLogs: 1
@@ -601,6 +601,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   s2sRedeemUserID: 
+--- !u!114 &1436402511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1436402505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be8925d47acaf4dbdaf76bb53e9a9904, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usePauseOverride: 1
 --- !u!1 &1441189266
 GameObject:
   m_ObjectHideFlags: 0

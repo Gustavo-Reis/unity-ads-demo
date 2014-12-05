@@ -20,10 +20,6 @@
 //     Development Build is enabled in Build Settings.
 //  - Test mode can be disabled while Development Build is set
 //     by checking the option to disable it in the inspector.
-//
-// HACK Notes:
-//  - Enable usePauseOverride if your game fails to unpause 
-//     or gets stuck on a black screen after an ad is closed.
 
 #pragma strict
 #if UNITY_IOS || UNITY_ANDROID
@@ -48,13 +44,10 @@ public class UnityAdsHelper extends MonoBehaviour
 	public var iOS : GameInfo;
 	public var android : GameInfo;
 	public var disableTestMode : boolean;
-	public var usePauseOverride : boolean; // HACK: Workaround for pause/resume bug.
 	public var showInfoLogs : boolean;
 	public var showDebugLogs : boolean;
 	public var showWarningLogs : boolean = true;
 	public var showErrorLogs : boolean = true;
-
-	protected static var _isPaused : boolean; // HACK: Workaround for pause/resume bug.
 
 #if UNITY_IOS || UNITY_ANDROID
 	protected function Awake () : void
@@ -93,17 +86,6 @@ public class UnityAdsHelper extends MonoBehaviour
 		}
 	}
 
-	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-	protected function OnApplicationPause (isPaused : boolean) : void
-	{
-		if (!usePauseOverride || isPaused == _isPaused) return;
-
-		if (isPaused) Debug.Log ("App was paused.");
-		else Debug.Log("App was resumed.");
-
-		if (usePauseOverride) PauseOverride(isPaused);
-	}
-
 	public static function isReady () : boolean { return isReady(null); }
 	public static function isReady (zone : String) : boolean
 	{
@@ -138,18 +120,6 @@ public class UnityAdsHelper extends MonoBehaviour
 			Debug.LogError("The ad failed to be shown.");
 			break;
 		}
-	}
-
-	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-	public static function PauseOverride (pause : boolean) : void
-	{
-		if (pause) Debug.Log("Pause game while ad is shown.");
-		else Debug.Log("Resume game after ad is closed.");
-		
-		AudioListener.volume = pause ? 0f : 1f;
-		Time.timeScale = pause ? 0f : 1f;
-
-		_isPaused = pause;
 	}
 #else
 	protected function Awake () : void
