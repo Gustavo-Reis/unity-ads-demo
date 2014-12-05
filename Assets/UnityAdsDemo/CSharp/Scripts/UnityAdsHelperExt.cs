@@ -6,8 +6,10 @@
 
 using UnityEngine;
 using System.Collections;
+#if UNITY_IOS || UNITY_ANDROID
 using UnityEngine.Advertisements;
 using UnityEngine.Advertisements.Optional;
+#endif
 
 [RequireComponent(typeof(UnityAdsHelper))]
 public class UnityAdsHelperExt : MonoBehaviour 
@@ -16,6 +18,7 @@ public class UnityAdsHelperExt : MonoBehaviour
 
 	private static string _sid;
 
+#if UNITY_IOS || UNITY_ANDROID
 	void Awake ()
 	{
 		if (string.IsNullOrEmpty(s2sRedeemUserID)) 
@@ -34,4 +37,5 @@ public class UnityAdsHelperExt : MonoBehaviour
 
 		Advertisement.Show(zone,options);
 	}
+#endif
 }

@@ -18,6 +18,7 @@ public class UnityAdsButtonMotor : MonoBehaviour
 
 	private UnityAdsButton _button;
 
+#if UNITY_IOS || UNITY_ANDROID
 	void Start ()
 	{
 		_button = GetComponent<UnityAdsButton>();
@@ -53,4 +54,5 @@ public class UnityAdsButtonMotor : MonoBehaviour
 		float step = Vector3.Magnitude(_disabledPos - _initialPos) / tweenSpeed * Time.deltaTime;
 		return Vector3.MoveTowards(transform.localPosition, targetPos, step);
 	}
+#endif
 }

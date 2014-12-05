@@ -26,7 +26,9 @@
 //     or gets stuck on a black screen after an ad is closed.
 
 #pragma strict
+#if UNITY_IOS || UNITY_ANDROID
 import UnityEngine.Advertisements;
+#endif
 
 @System.Serializable
 public class GameInfo
@@ -52,6 +54,7 @@ public var showErrorLogs : boolean = true;
 
 private static var _isPaused : boolean; // HACK: Workaround for pause/resume bug.
 
+#if UNITY_IOS || UNITY_ANDROID
 function Awake () : void
 {
 	var gameID : String = null;
@@ -64,11 +67,11 @@ function Awake () : void
 
 	if (!Advertisement.isSupported)
 	{
-		Debug.Log("Current platform is not supported with Unity Ads.");
+		Debug.LogWarning("Unity Ads is not supported on the current platform.");
 	}
 	else if (String.IsNullOrEmpty(gameID))
 	{
-		Debug.Log("A valid game ID is required to initialize Unity Ads.");
+		Debug.LogError("A valid game ID is required to initialize Unity Ads.");
 	}
 	else
 	{
@@ -146,3 +149,9 @@ public static function PauseOverride (pause : boolean) : void
 
 	_isPaused = pause;
 }
+#else
+function Awake () : void
+{
+	Debug.Log("Unity Ads is not supported on the current platform.");
+}
+#endif

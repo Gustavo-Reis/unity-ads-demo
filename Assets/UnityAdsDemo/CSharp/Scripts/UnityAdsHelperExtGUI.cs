@@ -10,6 +10,7 @@ public class UnityAdsHelperExtGUI : MonoBehaviour
 	public string s2sRedeemZoneID = "rewardedVideoZone";
 	public bool disablePause;
 
+#if UNITY_IOS || UNITY_ANDROID
 	void OnGUI ()
 	{
 		bool isReady = UnityAdsHelper.isReady(s2sRedeemZoneID);
@@ -26,4 +27,5 @@ public class UnityAdsHelperExtGUI : MonoBehaviour
 		}
 		GUI.enabled = true;
 	}
+#endif
 }

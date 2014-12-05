@@ -8,6 +8,7 @@
 public var zoneID : String = String.Empty;
 public var disablePause : boolean;
 
+#if UNITY_IOS || UNITY_ANDROID
 function OnGUI () : void
 {
 	var isReady : boolean = UnityAdsHelper.isReady(zoneID);
@@ -24,3 +25,4 @@ function OnGUI () : void
 	}
 	GUI.enabled = true;
 }
+#endif

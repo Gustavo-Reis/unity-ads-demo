@@ -5,8 +5,10 @@
 //  http://unityads.unity3d.com/help/Documentation%20for%20Publishers/Server-to-server-Redeem-Callbacks
 
 #pragma strict
+#if UNITY_IOS || UNITY_ANDROID
 import UnityEngine.Advertisements;
 import UnityEngine.Advertisements.Optional;
+#endif
 
 @script RequireComponent(UnityAdsHelper)
 
@@ -14,6 +16,7 @@ public var s2sRedeemUserID : String = String.Empty;
 
 private static var _sid : String;
 
+#if UNITY_IOS || UNITY_ANDROID
 function Awake () : void
 {
 	_sid = s2sRedeemUserID;
@@ -33,3 +36,4 @@ public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : voi
 
 	Advertisement.Show(zone,options);
 }
+#endif

@@ -16,6 +16,7 @@ private var _disabledPos : Vector3 = Vector3.zero;
 
 private var _button : UnityAdsButton;
 
+#if UNITY_IOS || UNITY_ANDROID
 function Start () : void
 {
 	_button = GetComponent(UnityAdsButton);
@@ -51,3 +52,4 @@ private function MoveTowards (targetPos : Vector3) : Vector3
 	var step : float = Vector3.Magnitude(_disabledPos - _initialPos) / tweenSpeed * Time.deltaTime;
 	return Vector3.MoveTowards(transform.localPosition, targetPos, step);
 }
+#endif
