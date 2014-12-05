@@ -20,10 +20,6 @@
 //     Development Build is enabled in Build Settings.
 //  - Test mode can be disabled while Development Build is set
 //     by checking the option to disable it in the inspector.
-//
-// HACK Notes:
-//  - Enable usePauseOverride if your game fails to unpause 
-//     or gets stuck on a black screen after an ad is closed.
 
 using UnityEngine;
 using System.Collections;
@@ -49,13 +45,10 @@ public class UnityAdsHelper : MonoBehaviour
 	public GameInfo iOS;
 	public GameInfo android;
 	public bool disableTestMode;
-	public bool usePauseOverride; // HACK: Workaround for pause/resume bug.
 	public bool showInfoLogs;
 	public bool showDebugLogs;
 	public bool showWarningLogs = true;
 	public bool showErrorLogs = true;
-
-	protected static bool _isPaused; // HACK: Workaround for pause/resume bug.
 
 #if UNITY_IOS || UNITY_ANDROID
 	protected void Awake() 
@@ -94,17 +87,6 @@ public class UnityAdsHelper : MonoBehaviour
 		}
 	}
 
-	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-	protected void OnApplicationPause (bool isPaused)
-	{
-		if (!usePauseOverride || isPaused == _isPaused) return;
-
-		if (isPaused) Debug.Log ("App was paused.");
-		else Debug.Log("App was resumed.");
-
-		if (usePauseOverride) PauseOverride(isPaused);
-	}
-
 	public static bool isReady (string zone = null)
 	{
 		if (string.IsNullOrEmpty(zone)) zone = null;
@@ -136,18 +118,6 @@ public class UnityAdsHelper : MonoBehaviour
 			Debug.LogError("The ad failed to be shown.");
 			break;
 		}
-	}
-
-	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-	public static void PauseOverride (bool pause)
-	{
-		if (pause) Debug.Log("Pause game while ad is shown.");
-		else Debug.Log("Resume game after ad is closed.");
-		
-		AudioListener.volume = pause ? 0f : 1f;
-		Time.timeScale = pause ? 0f : 1f;
-
-		_isPaused = pause;
 	}
 #else
 	protected void Awake ()
