@@ -600,7 +600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b617edd3aee04413896387ff3bd50d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  s2sRedeemUserID: rewardedVideoZone
+  s2sRedeemUserID: 
 --- !u!1 &1441189266
 GameObject:
   m_ObjectHideFlags: 0
