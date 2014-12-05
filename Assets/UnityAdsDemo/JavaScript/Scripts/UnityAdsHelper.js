@@ -52,10 +52,10 @@ public var showDebugLogs : boolean;
 public var showWarningLogs : boolean = true;
 public var showErrorLogs : boolean = true;
 
-private static var _isPaused : boolean; // HACK: Workaround for pause/resume bug.
+protected static var _isPaused : boolean; // HACK: Workaround for pause/resume bug.
 
 #if UNITY_IOS || UNITY_ANDROID
-function Awake () : void
+protected function Awake () : void
 {
 	var gameID : String = null;
 
@@ -92,7 +92,7 @@ function Awake () : void
 }
 
 // HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-function OnApplicationPause (isPaused : boolean) : void
+protected function OnApplicationPause (isPaused : boolean) : void
 {
 	if (!usePauseOverride || isPaused == _isPaused) return;
 
@@ -150,7 +150,7 @@ public static function PauseOverride (pause : boolean) : void
 	_isPaused = pause;
 }
 #else
-function Awake () : void
+protected function Awake () : void
 {
 	Debug.Log("Unity Ads is not supported on the current platform.");
 }

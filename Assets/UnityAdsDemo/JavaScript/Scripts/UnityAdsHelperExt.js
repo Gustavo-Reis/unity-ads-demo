@@ -14,12 +14,12 @@ import UnityEngine.Advertisements.Optional;
 
 public var s2sRedeemUserID : String = String.Empty;
 
-private static var _sid : String;
+protected private static var _sid : String;
 
 #if UNITY_IOS || UNITY_ANDROID
-function Awake () : void
+protected function Awake () : void
 {
-	_sid = s2sRedeemUserID;
+	_sid = s2sRedeemUserID = GetValidSID(s2sRedeemUserID);
 }
 
 public static function ShowAd () : void { ShowAd(null,true); }
@@ -27,7 +27,6 @@ public static function ShowAd (zone : String) : void { ShowAd(zone,true); }
 public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : void
 {
 	if (String.IsNullOrEmpty(zone)) zone = null;
-	if (String.IsNullOrEmpty(_sid)) _sid = SystemInfo.deviceUniqueIdentifier;
 	
 	var options : ShowOptionsExtended = new ShowOptionsExtended();
 	options.gamerSid = _sid;
@@ -35,5 +34,10 @@ public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : voi
 	options.resultCallback = UnityAdsHelper.HandleShowResult;
 
 	Advertisement.Show(zone,options);
+}
+
+public static function GetValidSID (id : String)
+{
+	return (String.IsNullOrEmpty(id)) ? SystemInfo.deviceUniqueIdentifier : id;
 }
 #endif

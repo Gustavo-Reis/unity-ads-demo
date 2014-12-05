@@ -55,10 +55,10 @@ public class UnityAdsHelper : MonoBehaviour
 	public bool showWarningLogs = true;
 	public bool showErrorLogs = true;
 
-	private static bool _isPaused; // HACK: Workaround for pause/resume bug.
+	protected static bool _isPaused; // HACK: Workaround for pause/resume bug.
 
 #if UNITY_IOS || UNITY_ANDROID
-	void Awake() 
+	protected void Awake() 
 	{
 		string gameID = null;
 
@@ -95,7 +95,7 @@ public class UnityAdsHelper : MonoBehaviour
 	}
 
 	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-	void OnApplicationPause (bool isPaused)
+	protected void OnApplicationPause (bool isPaused)
 	{
 		if (!usePauseOverride || isPaused == _isPaused) return;
 
@@ -150,7 +150,7 @@ public class UnityAdsHelper : MonoBehaviour
 		_isPaused = pause;
 	}
 #else
-	void Awake ()
+	protected void Awake ()
 	{
 		Debug.Log("Unity Ads is not supported on the current platform.");
 	}

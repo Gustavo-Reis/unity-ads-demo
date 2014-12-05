@@ -16,14 +16,12 @@ public class UnityAdsHelperExt : MonoBehaviour
 {
 	public string s2sRedeemUserID = string.Empty;
 
-	private static string _sid;
+	protected static string _sid;
 
 #if UNITY_IOS || UNITY_ANDROID
-	void Awake ()
+	protected void Awake ()
 	{
-		if (string.IsNullOrEmpty(s2sRedeemUserID)) 
-			s2sRedeemUserID = SystemInfo.deviceUniqueIdentifier;
-		_sid = s2sRedeemUserID;
+		_sid = s2sRedeemUserID = GetValidSID(s2sRedeemUserID);
 	}
 
 	public static void ShowAd (string zone = null, bool pauseGameDuringAd = true)
@@ -36,6 +34,11 @@ public class UnityAdsHelperExt : MonoBehaviour
 		options.resultCallback = UnityAdsHelper.HandleShowResult;
 
 		Advertisement.Show(zone,options);
+	}
+
+	public static string GetValidSID (string id)
+	{
+		return (string.IsNullOrEmpty(id)) ? SystemInfo.deviceUniqueIdentifier : id;
 	}
 #endif
 }
