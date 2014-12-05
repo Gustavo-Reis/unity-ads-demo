@@ -519,6 +519,7 @@ GameObject:
   - 4: {fileID: 1436402507}
   - 114: {fileID: 1436402506}
   - 114: {fileID: 1436402508}
+  - 114: {fileID: 1436402510}
   - 114: {fileID: 1436402509}
   m_Layer: 0
   m_Name: UnityAdsHelper
@@ -586,6 +587,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usePauseOverride: 1
+--- !u!114 &1436402510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1436402505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f521048c7cf45bc91a5e26b177b822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneID: 
+  timeout: 15
+  disablePause: 0
 --- !u!1 &1441189266
 GameObject:
   m_ObjectHideFlags: 0
