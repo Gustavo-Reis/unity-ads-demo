@@ -87,6 +87,8 @@ public class UnityAdsHelper : MonoBehaviour
 		}
 	}
 
+	public static bool isInitialized { get {return Advertisement.isInitialized; }}
+
 	public static bool isReady (string zone = null)
 	{
 		if (string.IsNullOrEmpty(zone)) zone = null;
