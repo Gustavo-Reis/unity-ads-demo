@@ -26,123 +26,135 @@
 //     or gets stuck on a black screen after an ad is closed.
 
 #pragma strict
+#if UNITY_IOS || UNITY_ANDROID
 import UnityEngine.Advertisements;
-
-@System.Serializable
-public class GameInfo
-{
-	@SerializeField
-	private var _gameID : String;
-	@SerializeField
-	private var _testGameID : String;
-
-	public function GetGameID () : String
-	{
-		return Debug.isDebugBuild && !String.IsNullOrEmpty(_testGameID) ? _testGameID : _gameID;
-	}
-}
-public var iOS : GameInfo;
-public var android : GameInfo;
-public var disableTestMode : boolean;
-public var usePauseOverride : boolean; // HACK: Workaround for pause/resume bug.
-public var showInfoLogs : boolean;
-public var showDebugLogs : boolean;
-public var showWarningLogs : boolean = true;
-public var showErrorLogs : boolean = true;
-
-private static var _isPaused : boolean; // HACK: Workaround for pause/resume bug.
-
-function Awake () : void
-{
-	var gameID : String = null;
-
-#if UNITY_IOS
-	gameID = iOS.GetGameID();
-#elif UNITY_ANDROID
-	gameID = android.GetGameID();
 #endif
 
-	if (!Advertisement.isSupported)
+public class UnityAdsHelper extends MonoBehaviour
+{
+	@System.Serializable
+	public class GameInfo
 	{
-		Debug.Log("Current platform is not supported with Unity Ads.");
+		@SerializeField
+		private var _gameID : String;
+		@SerializeField
+		private var _testGameID : String;
+
+		public function GetGameID () : String
+		{
+			return Debug.isDebugBuild && !String.IsNullOrEmpty(_testGameID) ? _testGameID : _gameID;
+		}
 	}
-	else if (String.IsNullOrEmpty(gameID))
+	public var iOS : GameInfo;
+	public var android : GameInfo;
+	public var disableTestMode : boolean;
+	public var usePauseOverride : boolean; // HACK: Workaround for pause/resume bug.
+	public var showInfoLogs : boolean;
+	public var showDebugLogs : boolean;
+	public var showWarningLogs : boolean = true;
+	public var showErrorLogs : boolean = true;
+
+	protected static var _isPaused : boolean; // HACK: Workaround for pause/resume bug.
+
+#if UNITY_IOS || UNITY_ANDROID
+	protected function Awake () : void
 	{
-		Debug.Log("A valid game ID is required to initialize Unity Ads.");
+		var gameID : String = null;
+
+#if UNITY_IOS
+		gameID = iOS.GetGameID();
+#elif UNITY_ANDROID
+		gameID = android.GetGameID();
+#endif
+
+		if (!Advertisement.isSupported)
+		{
+			Debug.LogWarning("Unity Ads is not supported on the current platform.");
+		}
+		else if (String.IsNullOrEmpty(gameID))
+		{
+			Debug.LogError("A valid game ID is required to initialize Unity Ads.");
+		}
+		else
+		{
+			Advertisement.allowPrecache = true;
+
+			Advertisement.debugLevel = Advertisement.DebugLevel.NONE;
+			if (showInfoLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.INFO;
+			if (showDebugLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.DEBUG;
+			if (showWarningLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.WARNING;
+			if (showErrorLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.ERROR;
+
+			var enableTestMode : boolean = Debug.isDebugBuild && !disableTestMode;
+			Debug.Log(String.Format("Initializing Unity Ads for game ID {0} with test mode {1}...",
+				                       gameID, enableTestMode ? "enabled" : "disabled"));
+
+			Advertisement.Initialize(gameID,enableTestMode);
+		}
 	}
-	else
+
+	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
+	protected function OnApplicationPause (isPaused : boolean) : void
 	{
-		Advertisement.allowPrecache = true;
+		if (!usePauseOverride || isPaused == _isPaused) return;
 
-		Advertisement.debugLevel = Advertisement.DebugLevel.NONE;
-		if (showInfoLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.INFO;
-		if (showDebugLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.DEBUG;
-		if (showWarningLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.WARNING;
-		if (showErrorLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.ERROR;
+		if (isPaused) Debug.Log ("App was paused.");
+		else Debug.Log("App was resumed.");
 
-		var enableTestMode : boolean = Debug.isDebugBuild && !disableTestMode;
-		Debug.Log(String.Format("Initializing Unity Ads for game ID {0} with test mode {1}...",
-			                       gameID, enableTestMode ? "enabled" : "disabled"));
-
-		Advertisement.Initialize(gameID,enableTestMode);
+		if (usePauseOverride) PauseOverride(isPaused);
 	}
-}
 
-// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-function OnApplicationPause (isPaused : boolean) : void
-{
-	if (!usePauseOverride || isPaused == _isPaused) return;
-
-	if (isPaused) Debug.Log ("App was paused.");
-	else Debug.Log("App was resumed.");
-
-	if (usePauseOverride) PauseOverride(isPaused);
-}
-
-public static function isReady () : boolean { return isReady(null); }
-public static function isReady (zone : String) : boolean
-{
-	if (String.IsNullOrEmpty(zone)) zone = null;
-	return Advertisement.isReady(zone);
-}
-
-public static function ShowAd () : void { ShowAd(null,true); }
-public static function ShowAd (zone : String) : void { ShowAd(zone,true); }
-public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : void
-{
-	if (String.IsNullOrEmpty(zone)) zone = null;
-	
-	var options : ShowOptions = new ShowOptions();
-	options.pause = pauseGameDuringAd;
-	options.resultCallback = HandleShowResult;
-
-	Advertisement.Show(zone,options);
-}
-
-public static function HandleShowResult (result : ShowResult) : void
-{
-	switch (result)
+	public static function isReady () : boolean { return isReady(null); }
+	public static function isReady (zone : String) : boolean
 	{
-	case ShowResult.Finished:
-		Debug.Log("The ad was successfully shown.");
-		break;
-	case ShowResult.Skipped:
-		Debug.LogWarning("The ad was skipped before reaching the end.");
-		break;
-	case ShowResult.Failed:
-		Debug.LogError("The ad failed to be shown.");
-		break;
+		if (String.IsNullOrEmpty(zone)) zone = null;
+		return Advertisement.isReady(zone);
 	}
-}
 
-// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-public static function PauseOverride (pause : boolean) : void
-{
-	if (pause) Debug.Log("Pause game while ad is shown.");
-	else Debug.Log("Resume game after ad is closed.");
-	
-	AudioListener.volume = pause ? 0f : 1f;
-	Time.timeScale = pause ? 0f : 1f;
+	public static function ShowAd () : void { ShowAd(null,true); }
+	public static function ShowAd (zone : String) : void { ShowAd(zone,true); }
+	public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : void
+	{
+		if (String.IsNullOrEmpty(zone)) zone = null;
+		
+		var options : ShowOptions = new ShowOptions();
+		options.pause = pauseGameDuringAd;
+		options.resultCallback = HandleShowResult;
 
-	_isPaused = pause;
+		Advertisement.Show(zone,options);
+	}
+
+	public static function HandleShowResult (result : ShowResult) : void
+	{
+		switch (result)
+		{
+		case ShowResult.Finished:
+			Debug.Log("The ad was successfully shown.");
+			break;
+		case ShowResult.Skipped:
+			Debug.LogWarning("The ad was skipped before reaching the end.");
+			break;
+		case ShowResult.Failed:
+			Debug.LogError("The ad failed to be shown.");
+			break;
+		}
+	}
+
+	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
+	public static function PauseOverride (pause : boolean) : void
+	{
+		if (pause) Debug.Log("Pause game while ad is shown.");
+		else Debug.Log("Resume game after ad is closed.");
+		
+		AudioListener.volume = pause ? 0f : 1f;
+		Time.timeScale = pause ? 0f : 1f;
+
+		_isPaused = pause;
+	}
+#else
+	protected function Awake () : void
+	{
+		Debug.Log("Unity Ads is not supported on the current platform.");
+	}
+#endif
 }

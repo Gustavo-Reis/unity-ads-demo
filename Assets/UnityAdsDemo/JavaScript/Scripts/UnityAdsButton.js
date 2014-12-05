@@ -5,17 +5,22 @@
 
 #pragma strict
 
-public var zoneID : String = String.Empty;
-public var disablePause : boolean;
-
-function OnMouseUpAsButton () : void
+public class UnityAdsButton extends MonoBehaviour
 {
-	if (UnityAdsHelper.isReady(zoneID))
+	public var zoneID : String = String.Empty;
+	public var disablePause : boolean;
+
+#if UNITY_IOS || UNITY_ANDROID
+	function OnMouseUpAsButton () : void
 	{
-		UnityAdsHelper.ShowAd(zoneID,!disablePause);
+		if (UnityAdsHelper.isReady(zoneID))
+		{
+			UnityAdsHelper.ShowAd(zoneID,!disablePause);
+		}
+		else
+		{
+			Debug.LogWarning("Unable to show ad. Zone is not yet ready.");
+		}
 	}
-	else
-	{
-		Debug.LogWarning("Unable to show ad. Zone is not yet ready.");
-	}
+#endif
 }

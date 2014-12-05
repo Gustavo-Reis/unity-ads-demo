@@ -10,6 +10,7 @@ public class UnityAdsHelperGUI : MonoBehaviour
 	public string zoneID = string.Empty;
 	public bool disablePause;
 
+#if UNITY_IOS || UNITY_ANDROID
 	void OnGUI ()
 	{
 		bool isReady = UnityAdsHelper.isReady(zoneID);
@@ -26,4 +27,5 @@ public class UnityAdsHelperGUI : MonoBehaviour
 		}
 		GUI.enabled = true;
 	}
+#endif
 }

@@ -112,12 +112,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 532970699}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 399fcccfaafed44878733162b89b38a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: -5
+  rotationSpeed: 30
   disabledPosZ: 10
   tweenSpeed: 1
 --- !u!114 &532970702
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd75c30bd98e42acb0a67dd592a0329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneID: 
+  zoneID: rewardedVideoZone
   disablePause: 0
 --- !u!23 &532970703
 Renderer:
@@ -198,12 +198,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 561689935}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 399fcccfaafed44878733162b89b38a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: -5
+  rotationSpeed: 50
   disabledPosZ: 10
   tweenSpeed: 1
 --- !u!114 &561689937
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd75c30bd98e42acb0a67dd592a0329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneID: 
+  zoneID: defaultVideoAndPictureZone
   disablePause: 0
 --- !u!23 &561689938
 Renderer:
@@ -600,7 +600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b617edd3aee04413896387ff3bd50d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  s2sRedeemUserID: 
+  s2sRedeemUserID: rewardedVideoZone
 --- !u!1 &1441189266
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,12 +709,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1801481253}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 399fcccfaafed44878733162b89b38a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: -5
+  rotationSpeed: 10
   disabledPosZ: 10
   tweenSpeed: 1
 --- !u!114 &1801481256
@@ -728,7 +728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd75c30bd98e42acb0a67dd592a0329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneID: 
+  zoneID: pictureZone
   disablePause: 0
 --- !u!23 &1801481257
 Renderer:

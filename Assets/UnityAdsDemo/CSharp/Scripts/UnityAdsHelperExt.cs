@@ -6,24 +6,26 @@
 
 using UnityEngine;
 using System.Collections;
+#if UNITY_IOS || UNITY_ANDROID
 using UnityEngine.Advertisements;
 using UnityEngine.Advertisements.Optional;
+#endif
 
 [RequireComponent(typeof(UnityAdsHelper))]
 public class UnityAdsHelperExt : MonoBehaviour 
 {
 	public string s2sRedeemUserID = string.Empty;
 
-	private static string _sid;
+	protected static string _sid;
 
-	void Awake ()
+#if UNITY_IOS || UNITY_ANDROID
+	protected void Awake ()
 	{
-		_sid = s2sRedeemUserID;
+		_sid = s2sRedeemUserID = GetValidSID(s2sRedeemUserID);
 	}
 
 	public static void ShowAd (string zone = null, bool pauseGameDuringAd = true)
 	{
-		if (string.IsNullOrEmpty(_sid)) _sid = SystemInfo.deviceUniqueIdentifier;
 		if (string.IsNullOrEmpty(zone)) zone = null;
 		
 		ShowOptionsExtended options = new ShowOptionsExtended();
@@ -33,4 +35,10 @@ public class UnityAdsHelperExt : MonoBehaviour
 
 		Advertisement.Show(zone,options);
 	}
+
+	public static string GetValidSID (string id)
+	{
+		return (string.IsNullOrEmpty(id)) ? SystemInfo.deviceUniqueIdentifier : id;
+	}
+#endif
 }

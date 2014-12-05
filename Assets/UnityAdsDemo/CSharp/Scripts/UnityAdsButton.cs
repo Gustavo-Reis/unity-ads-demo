@@ -4,12 +4,14 @@
 // A simple button example for showing Unity Ads.
 
 using UnityEngine;
+using System.Collections;
 
 public class UnityAdsButton : MonoBehaviour 
 {
 	public string zoneID = string.Empty;
 	public bool disablePause;
 
+#if UNITY_IOS || UNITY_ANDROID
 	void OnMouseUpAsButton ()
 	{
 		if (UnityAdsHelper.isReady(zoneID))
@@ -21,4 +23,5 @@ public class UnityAdsButton : MonoBehaviour
 			Debug.LogWarning("Unable to show ad. Zone is not yet ready.");
 		}
 	}
+#endif
 }

@@ -27,7 +27,9 @@
 
 using UnityEngine;
 using System.Collections;
+#if UNITY_IOS || UNITY_ANDROID
 using UnityEngine.Advertisements;
+#endif
 
 public class UnityAdsHelper : MonoBehaviour 
 {
@@ -53,9 +55,10 @@ public class UnityAdsHelper : MonoBehaviour
 	public bool showWarningLogs = true;
 	public bool showErrorLogs = true;
 
-	private static bool _isPaused; // HACK: Workaround for pause/resume bug.
+	protected static bool _isPaused; // HACK: Workaround for pause/resume bug.
 
-	void Awake() 
+#if UNITY_IOS || UNITY_ANDROID
+	protected void Awake() 
 	{
 		string gameID = null;
 
@@ -67,7 +70,7 @@ public class UnityAdsHelper : MonoBehaviour
 
 		if (!Advertisement.isSupported) 
 		{
-			Debug.Log("Current platform is not supported with Unity Ads.");
+			Debug.LogWarning("Unity Ads is not supported on the current platform.");
 		}
 		else if (string.IsNullOrEmpty(gameID))
 		{
@@ -92,7 +95,7 @@ public class UnityAdsHelper : MonoBehaviour
 	}
 
 	// HACK: Workaround for pause/resume bug. See Hack Notes above for details.
-	void OnApplicationPause (bool isPaused)
+	protected void OnApplicationPause (bool isPaused)
 	{
 		if (!usePauseOverride || isPaused == _isPaused) return;
 
@@ -146,4 +149,10 @@ public class UnityAdsHelper : MonoBehaviour
 
 		_isPaused = pause;
 	}
+#else
+	protected void Awake ()
+	{
+		Debug.Log("Unity Ads is not supported on the current platform.");
+	}
+#endif
 }
