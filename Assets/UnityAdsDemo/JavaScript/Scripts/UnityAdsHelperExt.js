@@ -11,33 +11,35 @@ import UnityEngine.Advertisements.Optional;
 #endif
 
 @script RequireComponent(UnityAdsHelper)
+public class UnityAdsHelperExt extends MonoBehaviour
+{
+	public var s2sRedeemUserID : String = String.Empty;
 
-public var s2sRedeemUserID : String = String.Empty;
-
-protected private static var _sid : String;
+	protected private static var _sid : String;
 
 #if UNITY_IOS || UNITY_ANDROID
-protected function Awake () : void
-{
-	_sid = s2sRedeemUserID = GetValidSID(s2sRedeemUserID);
-}
+	protected function Awake () : void
+	{
+		_sid = s2sRedeemUserID = GetValidSID(s2sRedeemUserID);
+	}
 
-public static function ShowAd () : void { ShowAd(null,true); }
-public static function ShowAd (zone : String) : void { ShowAd(zone,true); }
-public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : void
-{
-	if (String.IsNullOrEmpty(zone)) zone = null;
-	
-	var options : ShowOptionsExtended = new ShowOptionsExtended();
-	options.gamerSid = _sid;
-	options.pause = pauseGameDuringAd;
-	options.resultCallback = UnityAdsHelper.HandleShowResult;
+	public static function ShowAd () : void { ShowAd(null,true); }
+	public static function ShowAd (zone : String) : void { ShowAd(zone,true); }
+	public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : void
+	{
+		if (String.IsNullOrEmpty(zone)) zone = null;
+		
+		var options : ShowOptionsExtended = new ShowOptionsExtended();
+		options.gamerSid = _sid;
+		options.pause = pauseGameDuringAd;
+		options.resultCallback = UnityAdsHelper.HandleShowResult;
 
-	Advertisement.Show(zone,options);
-}
+		Advertisement.Show(zone,options);
+	}
 
-public static function GetValidSID (id : String)
-{
-	return (String.IsNullOrEmpty(id)) ? SystemInfo.deviceUniqueIdentifier : id;
-}
+	public static function GetValidSID (id : String)
+	{
+		return (String.IsNullOrEmpty(id)) ? SystemInfo.deviceUniqueIdentifier : id;
+	}
 #endif
+}

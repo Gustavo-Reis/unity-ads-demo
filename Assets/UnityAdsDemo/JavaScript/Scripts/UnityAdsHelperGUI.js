@@ -4,25 +4,27 @@
 #pragma strict
 
 @script RequireComponent(UnityAdsHelper)
-
-public var zoneID : String = String.Empty;
-public var disablePause : boolean;
+public class UnityAdsHelperGUI extends MonoBehaviour
+{
+	public var zoneID : String = String.Empty;
+	public var disablePause : boolean;
 
 #if UNITY_IOS || UNITY_ANDROID
-function OnGUI () : void
-{
-	var isReady : boolean = UnityAdsHelper.isReady(zoneID);
-	var pause : boolean = !disablePause;
-	
-	GUI.enabled = isReady;
-	if (GUI.Button(new Rect(10, 10, 150, 50), isReady ? "Show Ad" : "Waiting...")) 
+	function OnGUI () : void
 	{
-		Debug.Log(String.Format("Ad Placement zone with ID of {0} is {1}.",
-		                        String.IsNullOrEmpty(zoneID) ? "null" : zoneID,
-		                        isReady ? "ready" : "not ready"));
+		var isReady : boolean = UnityAdsHelper.isReady(zoneID);
+		var pause : boolean = !disablePause;
 		
-		if (isReady) UnityAdsHelper.ShowAd(zoneID,pause);
+		GUI.enabled = isReady;
+		if (GUI.Button(new Rect(10, 10, 150, 50), isReady ? "Show Ad" : "Waiting...")) 
+		{
+			Debug.Log(String.Format("Ad Placement zone with ID of {0} is {1}.",
+			                        String.IsNullOrEmpty(zoneID) ? "null" : zoneID,
+			                        isReady ? "ready" : "not ready"));
+			
+			if (isReady) UnityAdsHelper.ShowAd(zoneID,pause);
+		}
+		GUI.enabled = true;
 	}
-	GUI.enabled = true;
-}
 #endif
+}

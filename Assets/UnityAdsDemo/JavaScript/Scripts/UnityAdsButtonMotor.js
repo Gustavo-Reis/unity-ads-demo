@@ -6,50 +6,52 @@
 #pragma strict
 
 @script RequireComponent(UnityAdsButton)
+public class UnityAdsButtonMotor extends MonoBehaviour
+{
+	public var rotationSpeed : float = -5.0;
+	public var disabledPosZ : float = 10.0;
+	public var tweenSpeed : float = 1.0;
 
-public var rotationSpeed : float = -5.0;
-public var disabledPosZ : float = 10.0;
-public var tweenSpeed : float = 1.0;
+	private var _initialPos : Vector3 = Vector3.zero;
+	private var _disabledPos : Vector3 = Vector3.zero;
 
-private var _initialPos : Vector3 = Vector3.zero;
-private var _disabledPos : Vector3 = Vector3.zero;
-
-private var _button : UnityAdsButton;
+	private var _button : UnityAdsButton;
 
 #if UNITY_IOS || UNITY_ANDROID
-function Start () : void
-{
-	_button = GetComponent(UnityAdsButton);
-
-	_initialPos = transform.localPosition;
-	_disabledPos = new Vector3(_initialPos.x,_initialPos.y,disabledPosZ);
-
-	transform.localPosition = _disabledPos;
-}
-
-function Update () : void
-{
-	if (UnityAdsHelper.isReady(_button.zoneID))
+	function Start () : void
 	{
-		collider.enabled = true;
+		_button = GetComponent(UnityAdsButton);
 
-		var rotation : Vector3 = transform.localRotation.eulerAngles;
-		rotation += Vector3.up * rotationSpeed * Time.deltaTime;
+		_initialPos = transform.localPosition;
+		_disabledPos = new Vector3(_initialPos.x,_initialPos.y,disabledPosZ);
 
-		transform.localRotation = Quaternion.Euler(rotation);
-		transform.localPosition = MoveTowards(_initialPos);
+		transform.localPosition = _disabledPos;
 	}
-	else
+
+	function Update () : void
 	{
-		collider.enabled = false;
+		if (UnityAdsHelper.isReady(_button.zoneID))
+		{
+			collider.enabled = true;
 
-		transform.localPosition = MoveTowards(_disabledPos);
+			var rotation : Vector3 = transform.localRotation.eulerAngles;
+			rotation += Vector3.up * rotationSpeed * Time.deltaTime;
+
+			transform.localRotation = Quaternion.Euler(rotation);
+			transform.localPosition = MoveTowards(_initialPos);
+		}
+		else
+		{
+			collider.enabled = false;
+
+			transform.localPosition = MoveTowards(_disabledPos);
+		}
 	}
-}
 
-private function MoveTowards (targetPos : Vector3) : Vector3
-{
-	var step : float = Vector3.Magnitude(_disabledPos - _initialPos) / tweenSpeed * Time.deltaTime;
-	return Vector3.MoveTowards(transform.localPosition, targetPos, step);
-}
+	private function MoveTowards (targetPos : Vector3) : Vector3
+	{
+		var step : float = Vector3.Magnitude(_disabledPos - _initialPos) / tweenSpeed * Time.deltaTime;
+		return Vector3.MoveTowards(transform.localPosition, targetPos, step);
+	}
 #endif
+}
