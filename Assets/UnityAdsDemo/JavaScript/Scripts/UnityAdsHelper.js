@@ -85,6 +85,8 @@ public class UnityAdsHelper extends MonoBehaviour
 			Advertisement.Initialize(gameID,enableTestMode);
 		}
 	}
+	
+	public static function isInitialized () : boolean { return Advertisement.isInitialized; }
 
 	public static function isReady () : boolean { return isReady(null); }
 	public static function isReady (zone : String) : boolean
