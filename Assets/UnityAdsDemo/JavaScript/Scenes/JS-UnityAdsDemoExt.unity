@@ -625,7 +625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f521048c7cf45bc91a5e26b177b822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneID: 
+  zoneID: pictureZone
   timeout: 15
   disablePause: 0
 --- !u!1 &1441189266

@@ -598,8 +598,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ad600de41674a578d9ef707e904150, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneID: 
+  zoneID: pictureZone
   timeout: 15
+  disablePause: 0
 --- !u!1 &1441189266
 GameObject:
   m_ObjectHideFlags: 0
