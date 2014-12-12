@@ -95,15 +95,24 @@ public class UnityAdsHelper : MonoBehaviour
 		return Advertisement.isReady(zone);
 	}
 
-	public static void ShowAd (string zone = null, bool pauseGameDuringAd = true)
+	public static bool ShowAd (string zone = null, bool pauseGameDuringAd = true)
 	{
 		if (string.IsNullOrEmpty(zone)) zone = null;
+
+		if (!Advertisement.isReady(zone))
+		{
+			Debug.LogWarning(string.Format("The ad placement zone ($0) is not ready. Unable to show ad.",
+			                               zone == null ? "default" : zone));
+			return false;
+		}
 
 		ShowOptions options = new ShowOptions();
 		options.pause = pauseGameDuringAd;
 		options.resultCallback = HandleShowResult;
 		
 		Advertisement.Show(zone,options);
+
+		return true;
 	}
 	
 	public static void HandleShowResult (ShowResult result)
