@@ -540,11 +540,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iOS:
-    _gameID: 18659
-    _testGameID: 18660
+    _gameID: 18660
+    _testGameID: 18659
   android:
-    _gameID: 18657
-    _testGameID: 18658
+    _gameID: 18658
+    _testGameID: 18657
   disableTestMode: 0
   showInfoLogs: 0
   showDebugLogs: 0
