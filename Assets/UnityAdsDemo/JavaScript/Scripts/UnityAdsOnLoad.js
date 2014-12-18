@@ -17,8 +17,8 @@ public class UnityAdsOnLoad extends MonoBehaviour
 	function Start () : IEnumerator
 	{
 		// Check to see if Unity Ads is initialized.
-		//  If not, wait until the next frame and check again.
-		do { yield; }
+		//  If not, wait a second before trying again.
+		do { yield WaitForSeconds(1.0); }
 		while (!UnityAdsHelper.isInitialized());
 		
 		Debug.Log("Unity Ads has finished initializing. Waiting for ads to be ready...");
@@ -27,7 +27,7 @@ public class UnityAdsOnLoad extends MonoBehaviour
 		_startTime = Time.timeSinceLevelLoad;
 		
 		// Check to see if Unity Ads are available and ready to be shown. 
-		//  If not, wait until the next frame and check again.
+		//  If not, wait a second before trying again.
 		while (!UnityAdsHelper.isReady(zoneID))
 		{
 			if (Time.timeSinceLevelLoad - _startTime > timeout)
@@ -39,7 +39,7 @@ public class UnityAdsOnLoad extends MonoBehaviour
 				return;
 			}
 
-			yield;
+			yield WaitForSeconds(1.0);
 		}
 		
 		Debug.Log("Ads are available and ready. Showing ad now...");
