@@ -12,13 +12,14 @@ public class UnityAdsOnLoad extends MonoBehaviour
 	public var disablePause : boolean;
 
 	private var _startTime : float = 0.0;
+	private var _yieldTime : float = 1.0;
 
 #if UNITY_IOS || UNITY_ANDROID
 	function Start () : IEnumerator
 	{
 		// Check to see if Unity Ads is initialized.
 		//  If not, wait a second before trying again.
-		do { yield WaitForSeconds(1.0); }
+		do { yield WaitForSeconds(_yieldTime); }
 		while (!UnityAdsHelper.isInitialized());
 		
 		Debug.Log("Unity Ads has finished initializing. Waiting for ads to be ready...");
@@ -39,7 +40,7 @@ public class UnityAdsOnLoad extends MonoBehaviour
 				return;
 			}
 
-			yield WaitForSeconds(1.0);
+			yield WaitForSeconds(_yieldTime);
 		}
 		
 		Debug.Log("Ads are available and ready. Showing ad now...");
