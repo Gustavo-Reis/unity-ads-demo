@@ -1,4 +1,4 @@
-﻿// UnityAdsButton.cs - Written for Unity Ads Asset Store v1.0.4 (SDK 1.3.10)
+﻿// UnityAdsOnLoad.cs - Written for Unity Ads Asset Store v1.0.4 (SDK 1.3.10)
 //  by Nikkolai Davenport <nikkolai@unity3d.com>
 //
 // A simple example for showing ads on load using the UnityAdsHelper script.
