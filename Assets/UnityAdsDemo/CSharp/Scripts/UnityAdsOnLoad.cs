@@ -1,4 +1,4 @@
-﻿// UnityAdsButton.cs - Written for Unity Ads Asset Store v1.0.4 (SDK 1.3.10)
+﻿// UnityAdsOnLoad.cs - Written for Unity Ads Asset Store v1.0.4 (SDK 1.3.10)
 //  by Nikkolai Davenport <nikkolai@unity3d.com>
 //
 // A simple example for showing ads on load using the UnityAdsHelper script.
@@ -13,13 +13,14 @@ public class UnityAdsOnLoad : MonoBehaviour
 	public bool disablePause;
 
 	private float _startTime = 0f;
+	private float _yieldTime = 1f;
 
 #if UNITY_IOS || UNITY_ANDROID
 	IEnumerator Start ()
 	{
 		// Check to see if Unity Ads is initialized.
-		//  If not, wait until the next frame and check again.
-		do yield return null;
+		//  If not, wait a second before trying again.
+		do yield return new WaitForSeconds(_yieldTime);
 		while (!UnityAdsHelper.isInitialized);
 		
 		Debug.Log("Unity Ads has finished initializing. Waiting for ads to be ready...");
@@ -28,7 +29,7 @@ public class UnityAdsOnLoad : MonoBehaviour
 		_startTime = Time.timeSinceLevelLoad;
 		
 		// Check to see if Unity Ads are available and ready to be shown. 
-		//  If not, wait until the next frame and check again.
+		//  If not, wait a second before trying again.
 		while (!UnityAdsHelper.isReady(zoneID))
 		{
 			if (Time.timeSinceLevelLoad - _startTime > timeout)
@@ -40,7 +41,7 @@ public class UnityAdsOnLoad : MonoBehaviour
 				yield break;
 			}
 
-			yield return null;
+			yield return new WaitForSeconds(_yieldTime);
 		}
 		
 		Debug.Log("Ads are available and ready. Showing ad now...");

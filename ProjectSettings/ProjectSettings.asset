@@ -158,7 +158,7 @@ PlayerSettings:
   flashStrippingLevel: 2
   spritePackerPolicy: 
   scriptingDefineSymbols: {}
-  metroPackageName: SuperAwesomeUnityAdsDemo
+  metroPackageName: UnityAdsDemo
   metroPackageLogo: 
   metroPackageLogo140: 
   metroPackageLogo180: 
@@ -169,7 +169,7 @@ PlayerSettings:
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: SuperAwesomeUnityAdsDemo
+  metroApplicationDescription: UnityAdsDemo
   metroStoreTileLogo80: 
   metroStoreTileLogo: 
   metroStoreTileLogo140: 
