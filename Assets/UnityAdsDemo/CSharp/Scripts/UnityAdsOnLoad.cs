@@ -20,6 +20,9 @@ public class UnityAdsOnLoad : MonoBehaviour
 	//  For more info, see: http://docs.unity3d.com/ScriptReference/YieldInstruction.html
 	IEnumerator Start ()
 	{
+		// Zone name used in debug messages.
+		string zoneName = string.IsNullOrEmpty(zoneID) ? "the default ad placement zone" : zoneID;
+
 		// Set a start time for the timeout.
 		_startTime = Time.timeSinceLevelLoad;
 		
@@ -40,7 +43,7 @@ public class UnityAdsOnLoad : MonoBehaviour
 		}
 		
 		Debug.Log("Unity Ads has finished initializing. Waiting for ads to be ready...");
-		
+
 		// Set a start time for the timeout.
 		_startTime = Time.timeSinceLevelLoad;
 		
@@ -50,7 +53,7 @@ public class UnityAdsOnLoad : MonoBehaviour
 		{
 			if (Time.timeSinceLevelLoad - _startTime > timeout)
 			{
-				Debug.LogWarning("The process for showing ads on load has timed out. Ad was not shown.");
+				Debug.LogWarning(string.Format("The process of showing ads on load for {0} has timed out. Ad was not shown.",zoneName));
 				
 				// Break out of both this loop and the Start method; Unity Ads will not
 				//  be shown on load since the wait time exceeded the time limit.
@@ -60,7 +63,7 @@ public class UnityAdsOnLoad : MonoBehaviour
 			yield return new WaitForSeconds(_yieldTime);
 		}
 		
-		Debug.Log("Ads are available and ready. Showing ad now...");
+		Debug.Log(string.Format("Ads for {0} are available and ready. Showing ad now...",zoneName));
 		
 		// Show ad after Unity Ads finishes initializing and ads are ready to show.
 		UnityAdsHelper.ShowAd(zoneID,!disablePause);
