@@ -11,20 +11,36 @@ public class UnityAdsOnLoad : MonoBehaviour
 	public string zoneID = string.Empty;
 	public float timeout = 15f;
 	public bool disablePause;
-
+	
 	private float _startTime = 0f;
 	private float _yieldTime = 1f;
-
+	
 #if UNITY_IOS || UNITY_ANDROID
+	// A return type of IEnumerator allows for the use of yield statements.
+	//  For more info, see: http://docs.unity3d.com/ScriptReference/YieldInstruction.html
 	IEnumerator Start ()
 	{
+		// Set a start time for the timeout.
+		_startTime = Time.timeSinceLevelLoad;
+		
 		// Check to see if Unity Ads is initialized.
 		//  If not, wait a second before trying again.
-		do yield return new WaitForSeconds(_yieldTime);
-		while (!UnityAdsHelper.isInitialized);
+		while (!UnityAdsHelper.isInitialized)
+		{
+			if (Time.timeSinceLevelLoad - _startTime > timeout)
+			{
+				Debug.LogWarning("Unity Ads failed to initialize in a timely manner. Ad will not be shown on load.");
+				
+				// Break out of both this loop and the Start method; Unity Ads will not
+				//  be shown on load since the wait time exceeded the time limit.
+				yield break;
+			}
+			
+			yield return new WaitForSeconds(_yieldTime);
+		}
 		
 		Debug.Log("Unity Ads has finished initializing. Waiting for ads to be ready...");
-
+		
 		// Set a start time for the timeout.
 		_startTime = Time.timeSinceLevelLoad;
 		
@@ -34,13 +50,13 @@ public class UnityAdsOnLoad : MonoBehaviour
 		{
 			if (Time.timeSinceLevelLoad - _startTime > timeout)
 			{
-				Debug.LogWarning("The process for showing ads on load has timed out. Ad not shown.");
-
+				Debug.LogWarning("The process for showing ads on load has timed out. Ad was not shown.");
+				
 				// Break out of both this loop and the Start method; Unity Ads will not
 				//  be shown on load since the wait time exceeded the time limit.
 				yield break;
 			}
-
+			
 			yield return new WaitForSeconds(_yieldTime);
 		}
 		
