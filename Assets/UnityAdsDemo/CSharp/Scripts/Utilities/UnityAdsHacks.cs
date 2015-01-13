@@ -18,22 +18,23 @@ public class UnityAdsHacks : MonoBehaviour
 	
 	protected void OnApplicationPause (bool isPaused)
 	{
-		if (!usePauseOverride || isPaused == _isPaused) return;
-		
-		if (isPaused) Debug.Log ("App was paused.");
-		else Debug.Log("App was resumed.");
-		
+		if (isPaused == _isPaused) return;
+
 		if (usePauseOverride) PauseOverride(isPaused);
+		else if (isPaused) Debug.Log ("App was paused (sent to background).");
+		else Debug.Log("App was resumed (returned from background).");
+
+		_isPaused = isPaused;
 	}
 
 	public static void PauseOverride (bool pause)
 	{
-		if (pause) Debug.Log("Pause game while ad is shown.");
-		else Debug.Log("Resume game after ad is closed.");
-		
-		AudioListener.volume = pause ? 0f : 1f;
-		Time.timeScale = pause ? 0f : 1f;
-		
-		_isPaused = pause;
+		float targetValue = pause ? 0f : 1f;
+		AudioListener.volume = targetValue;
+		Time.timeScale = targetValue;
+
+		string targetValueMsg = string.Format("(volume and timeScale value set to {0})",targetValue);
+		if (pause) Debug.Log(string.Format("UNITY ADS HACK: Pause game while ad is shown {0}.",targetValueMsg));
+		else Debug.Log(string.Format("UNITY ADS HACK: Resume game after ad is closed {0}.",targetValueMsg));		
 	}
 }
