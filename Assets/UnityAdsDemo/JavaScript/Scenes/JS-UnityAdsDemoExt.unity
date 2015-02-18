@@ -73,6 +73,7 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
+    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!1 &532970699
 GameObject:
@@ -548,8 +549,8 @@ MonoBehaviour:
     _gameID: 18658
     _testGameID: 18657
   disableTestMode: 0
-  showInfoLogs: 0
-  showDebugLogs: 0
+  showInfoLogs: 1
+  showDebugLogs: 1
   showWarningLogs: 1
   showErrorLogs: 1
 --- !u!4 &1436402507
@@ -625,7 +626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f521048c7cf45bc91a5e26b177b822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneID: pictureZone
+  zoneID: 
   timeout: 15
   disablePause: 0
 --- !u!1 &1441189266
