@@ -43,15 +43,18 @@ public class UnityAdsHelper extends MonoBehaviour
 	}
 	public var iOS : GameInfo;
 	public var android : GameInfo;
+	
+	// Development Build must be enabled in Build Settings
+	//  in order to use test mode and to show debug levels.
 	public var disableTestMode : boolean;
 	public var showInfoLogs : boolean;
 	public var showDebugLogs : boolean;
 	public var showWarningLogs : boolean = true;
 	public var showErrorLogs : boolean = true;
 
-#if UNITY_IOS || UNITY_ANDROID
 	protected function Awake () : void
 	{
+#if UNITY_IOS || UNITY_ANDROID
 		var gameID : String = null;
 
 #if UNITY_IOS
@@ -60,23 +63,17 @@ public class UnityAdsHelper extends MonoBehaviour
 		gameID = android.GetGameID();
 #endif
 
-		if (!Advertisement.isSupported)
-		{
-			Debug.LogWarning("Unity Ads is not supported on the current platform.");
-		}
-		else if (String.IsNullOrEmpty(gameID))
+		if (String.IsNullOrEmpty(gameID))
 		{
 			Debug.LogError("A valid game ID is required to initialize Unity Ads.");
 		}
 		else
 		{
-			Advertisement.allowPrecache = true;
-
 			Advertisement.debugLevel = Advertisement.DebugLevel.NONE;
-			if (showInfoLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.INFO;
-			if (showDebugLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.DEBUG;
+			if (showInfoLogs) Advertisement.debugLevel    |= Advertisement.DebugLevel.INFO;
+			if (showDebugLogs) Advertisement.debugLevel   |= Advertisement.DebugLevel.DEBUG;
 			if (showWarningLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.WARNING;
-			if (showErrorLogs) Advertisement.debugLevel |= Advertisement.DebugLevel.ERROR;
+			if (showErrorLogs) Advertisement.debugLevel   |= Advertisement.DebugLevel.ERROR;
 
 			var enableTestMode : boolean = Debug.isDebugBuild && !disableTestMode;
 			Debug.Log(String.Format("Initializing Unity Ads for game ID {0} with test mode {1}...",
@@ -84,26 +81,40 @@ public class UnityAdsHelper extends MonoBehaviour
 
 			Advertisement.Initialize(gameID,enableTestMode);
 		}
+#else
+		Debug.LogWarning("Unity Ads is not supported on the current build platform.");
+#endif
 	}
 	
-	public static function isInitialized () : boolean { return Advertisement.isInitialized; }
+	public static function isInitialized () : boolean { 
+#if UNITY_IOS || UNITY_ANDROID
+		return Advertisement.isInitialized; 	
+#else
+		return false;
+#endif
+	}
 
 	public static function isReady () : boolean { return isReady(null); }
 	public static function isReady (zone : String) : boolean
 	{
+#if UNITY_IOS || UNITY_ANDROID
 		if (String.IsNullOrEmpty(zone)) zone = null;
 		return Advertisement.isReady(zone);
+#else
+		return false;
+#endif
 	}
 
 	public static function ShowAd () : boolean { return ShowAd(null,true); }
 	public static function ShowAd (zone : String) : boolean { return ShowAd(zone,true); }
 	public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : boolean
 	{
+#if UNITY_IOS || UNITY_ANDROID
 		if (String.IsNullOrEmpty(zone)) zone = null;
 		
 		if (!Advertisement.isReady(zone))
 		{
-			Debug.LogWarning(String.Format("The ad placement zone ($0) is not ready. Unable to show ad.",
+			Debug.LogWarning(String.Format("Unable to show ad. The ad placement zone ($0) is not ready.",
 			                               zone == null ? "default" : zone));
 			return false;
 		}
@@ -115,9 +126,14 @@ public class UnityAdsHelper extends MonoBehaviour
 		Advertisement.Show(zone,options);
 		
 		return true;
+#else
+		Debug.LogError("Failed to show ad. Unity Ads is not supported on the current build platform.");
+		return false;
+#endif		
 	}
 
-	public static function HandleShowResult (result : ShowResult) : void
+#if UNITY_IOS || UNITY_ANDROID
+	private static function HandleShowResult (result : ShowResult) : void
 	{
 		switch (result)
 		{
@@ -131,11 +147,6 @@ public class UnityAdsHelper extends MonoBehaviour
 			Debug.LogError("The ad failed to be shown.");
 			break;
 		}
-	}
-#else
-	protected function Awake () : void
-	{
-		Debug.Log("Unity Ads is not supported on the current platform.");
 	}
 #endif
 }

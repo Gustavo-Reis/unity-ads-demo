@@ -17,29 +17,59 @@ public class UnityAdsHelperExt extends MonoBehaviour
 
 	protected private static var _sid : String;
 
-#if UNITY_IOS || UNITY_ANDROID
 	protected function Awake () : void
 	{
 		_sid = s2sRedeemUserID = GetValidSID(s2sRedeemUserID);
 	}
 
-	public static function ShowAd () : void { ShowAd(null,true); }
-	public static function ShowAd (zone : String) : void { ShowAd(zone,true); }
-	public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : void
+	public static function ShowAd () : boolean { return ShowAd(null,true); }
+	public static function ShowAd (zone : String) : boolean { return ShowAd(zone,true); }
+	public static function ShowAd (zone : String, pauseGameDuringAd : boolean) : boolean
 	{
+#if UNITY_IOS || UNITY_ANDROID
 		if (String.IsNullOrEmpty(zone)) zone = null;
 		
+		if (!Advertisement.isReady(zone))
+		{
+			Debug.LogWarning(String.Format("Unable to show ad. The ad placement zone ($0) is not ready.",
+			                               zone == null ? "default" : zone));
+			return false;
+		}
+
 		var options : ShowOptionsExtended = new ShowOptionsExtended();
 		options.gamerSid = _sid;
 		options.pause = pauseGameDuringAd;
-		options.resultCallback = UnityAdsHelper.HandleShowResult;
+		options.resultCallback = HandleShowResult;
 
 		Advertisement.Show(zone,options);
+		
+		return true;
+#else
+		Debug.LogError("Failed to show ad. Unity Ads is not supported on the current build platform.");
+		return false;
+#endif
 	}
 
 	public static function GetValidSID (id : String)
 	{
 		return (String.IsNullOrEmpty(id)) ? SystemInfo.deviceUniqueIdentifier : id;
+	}
+
+#if UNITY_IOS || UNITY_ANDROID
+	private static function HandleShowResult (result : ShowResult) : void
+	{
+		switch (result)
+		{
+		case ShowResult.Finished:
+			Debug.Log("The ad was successfully shown.");
+			break;
+		case ShowResult.Skipped:
+			Debug.LogWarning("The ad was skipped before reaching the end.");
+			break;
+		case ShowResult.Failed:
+			Debug.LogError("The ad failed to be shown.");
+			break;
+		}
 	}
 #endif
 }
