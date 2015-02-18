@@ -30,10 +30,11 @@ public class UnityAdsHacks : MonoBehaviour
 	public static void PauseOverride (bool pause)
 	{
 		float targetValue = pause ? 0f : 1f;
+		string targetValueMsg = string.Format("(volume and timeScale value set to {0})",targetValue);
+
 		AudioListener.volume = targetValue;
 		Time.timeScale = targetValue;
 
-		string targetValueMsg = string.Format("(volume and timeScale value set to {0})",targetValue);
 		if (pause) Debug.Log(string.Format("UNITY ADS HACK: Pause game while ad is shown {0}.",targetValueMsg));
 		else Debug.Log(string.Format("UNITY ADS HACK: Resume game after ad is closed {0}.",targetValueMsg));		
 	}
