@@ -18,27 +18,57 @@ public class UnityAdsHelperExt : MonoBehaviour
 
 	protected static string _sid;
 
-#if UNITY_IOS || UNITY_ANDROID
 	protected void Awake ()
 	{
 		_sid = s2sRedeemUserID = GetValidSID(s2sRedeemUserID);
 	}
 
-	public static void ShowAd (string zone = null, bool pauseGameDuringAd = true)
+	public static bool ShowAd (string zone = null, bool pauseGameDuringAd = true)
 	{
+#if UNITY_IOS || UNITY_ANDROID
 		if (string.IsNullOrEmpty(zone)) zone = null;
+		
+		if (!Advertisement.isReady(zone))
+		{
+			Debug.LogWarning(string.Format("Unable to show ad. The ad placement zone ($0) is not ready.",
+			                               zone == null ? "default" : zone));
+			return false;
+		}
 		
 		ShowOptionsExtended options = new ShowOptionsExtended();
 		options.gamerSid = _sid;
 		options.pause = pauseGameDuringAd;
-		options.resultCallback = UnityAdsHelper.HandleShowResult;
+		options.resultCallback = HandleShowResult;
 
 		Advertisement.Show(zone,options);
+
+		return true;
+#else
+		Debug.LogError("Failed to show ad. Unity Ads is not supported on the current build platform.");
+		return false;
+#endif
 	}
 
 	public static string GetValidSID (string id)
 	{
 		return (string.IsNullOrEmpty(id)) ? SystemInfo.deviceUniqueIdentifier : id;
+	}
+
+#if UNITY_IOS || UNITY_ANDROID
+	private static void HandleShowResult (ShowResult result)
+	{
+		switch (result)
+		{
+		case ShowResult.Finished:
+			Debug.Log("The ad was successfully shown.");
+			break;
+		case ShowResult.Skipped:
+			Debug.Log("The ad was skipped before reaching the end.");
+			break;
+		case ShowResult.Failed:
+			Debug.LogError("The ad failed to be shown.");
+			break;
+		}
 	}
 #endif
 }
